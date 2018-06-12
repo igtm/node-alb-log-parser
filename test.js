@@ -3,7 +3,8 @@ var tap = require('tap');
 var parse = require('./index.js')
 
 tap.test('http traffic', function (t) {
-  var parsed = parse(
+  var parser = new parse()
+  var parsed = parser.parse(
     'http 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.000073 0.001048 0.000057 200 200 0 29 "GET http://www.example.com:80/ HTTP/1.1" "curl/7.38.0" - - arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
   t.equal(parsed.type, 'http', 'we have type');
@@ -39,7 +40,8 @@ tap.test('http traffic', function (t) {
 
 
 tap.test('https traffic', function (t) {
-  var parsed = parse(
+  var parser = new parse()
+  var parsed = parser.parse(
     'https 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.000086 0.001048 0.001337 200 200 0 57 "GET https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h?foo=bar&hoge=fuga HTTP/1.1" "curl/7.38.0" DHE-RSA-AES128-SHA TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
   t.equal(parsed.timestamp, '2015-05-13T23:39:43.945958Z', 'we have timestamp');
@@ -70,8 +72,25 @@ tap.test('https traffic', function (t) {
   t.end();
 });
 
+tap.test('https traffic - path param', function (t) {
+  var parser = new parse({
+    pathParams: [
+      {
+        method: "GET",
+        path:   "/p/a/t/h/:value/hoge"
+      }
+    ]
+  })
+  var parsed = parser.parse(
+    'https 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.000086 0.001048 0.001337 200 200 0 57 "GET https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h/param/hoge?foo=bar&hoge=fuga HTTP/1.1" "curl/7.38.0" DHE-RSA-AES128-SHA TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
+  );
+  t.equal(parsed.request_uri_path_param, 'param', 'we have request_uri_path_param');
+  t.end();
+});
+
 tap.test('tcp traffic', function (t) {
-  var parsed = parse(
+  var parser = new parse()
+  var parsed = parser.parse(
     'http 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.001069 0.000028 0.000041 - - 82 305 "- - - " "-" - - arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
   t.equal(parsed.request, '- - - ', 'we have request');
@@ -80,7 +99,8 @@ tap.test('tcp traffic', function (t) {
 });
 
 tap.test('ssl traffic', function (t) {
-  var parsed = parse(
+  var parser = new parse()
+  var parsed = parser.parse(
     'https 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.001065 0.000015 0.000023 - - 57 502 "- - - " "-" ECDHE-ECDSA-AES128-GCM-SHA256 TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
   t.equal(parsed.ssl_cipher, 'ECDHE-ECDSA-AES128-GCM-SHA256', 'we have ssl_cipher');
@@ -89,7 +109,8 @@ tap.test('ssl traffic', function (t) {
 });
 
 tap.test('doesn\'t receive traffic ', function (t) {
-  var parsed = parse(
+  var parser = new parse()
+  var parsed = parser.parse(
     'http 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 -1 0.001065 0.000015 0.000023 - - 57 502 "- - - " "-" ECDHE-ECDSA-AES128-GCM-SHA256 TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
   t.equal(parsed.target, -1, 'we have target');
