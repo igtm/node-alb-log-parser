@@ -103,7 +103,7 @@ var parser = class albLogParser
       parsed[request_labels[i++]] = parseInt(url.port);
       parsed[request_labels[i++]] = pathParam.path ? pathParam.path : url.pathname;
       parsed[request_labels[i++]] = url.query;
-      parsed[request_labels[i++]] = pathParam.value;
+      parsed[request_labels[i++]] = pathParam.values;
 
     } else {
       request_labels.forEach(function(label) {
@@ -117,14 +117,14 @@ var parser = class albLogParser
   parsePathParam(method, path) {
     for(const obj in this.pathParams) {
       var pathParser = new Path(this.pathParams[obj].path);
-      var param = pathParser.test(path)
-      if (method === this.pathParams[obj].method && param.value) {
+      var param = {values: pathParser.test(path)}
+      if (method === this.pathParams[obj].method && param.values) {
         param["path"] = pathParser.path
         return param
       }
     }
 
-    return {value: ""}
+    return {values: {}}
   }
 }
 

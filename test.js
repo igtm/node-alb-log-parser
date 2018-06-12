@@ -77,15 +77,15 @@ tap.test('https traffic - path param', function (t) {
     pathParams: [
       {
         method: "GET",
-        path:   "/p/a/t/h/:value/hoge"
+        path:   "/p/a/t/h/:value/hoge/:fuga"
       }
     ]
   })
   var parsed = parser.parse(
-    'https 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.000086 0.001048 0.001337 200 200 0 57 "GET https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h/param/hoge?foo=bar&hoge=fuga HTTP/1.1" "curl/7.38.0" DHE-RSA-AES128-SHA TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
+    'https 2015-05-13T23:39:43.945958Z my-loadbalancer 192.168.131.39:2817 10.0.0.1:80 0.000086 0.001048 0.001337 200 200 0 57 "GET https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h/param/hoge/oi?foo=bar&hoge=fuga HTTP/1.1" "curl/7.38.0" DHE-RSA-AES128-SHA TLSv1.2 arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-targets/73e2d6bc24d8a067 "Root=1-58337262-36d228ad5d99923122bbe354"'
   );
-  t.equal(parsed.request_uri_path_param, 'param', 'we have request_uri_path_param');
-  t.equal(parsed.request_uri_path, '/p/a/t/h/:value/hoge', 'we have request_uri_path');
+  t.equal(JSON.stringify(parsed.request_uri_path_param), JSON.stringify({value:"param", fuga:"oi"}), 'we have request_uri_path_param');
+  t.equal(parsed.request_uri_path, '/p/a/t/h/:value/hoge/:fuga', 'we have request_uri_path');
   t.end();
 });
 
