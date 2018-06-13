@@ -23,6 +23,7 @@
   "author": "igtm",
   "license": "MIT",
   "devDependencies": {
+    "path-parser": "^4.1.1",
     "tap": "~0.4.3"
   },
   "dependencies": {
