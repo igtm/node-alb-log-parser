@@ -56,6 +56,10 @@ function parseAlbLogLine(line) {
     if (finished) {
       if (element) {
         const fieldName = fields[counter]
+
+        // Allow for extra fields in the ALB log
+        if (typeof fieldName === 'undefined' || fieldName == null) continue;
+
         // Convert all numeric strings to numbers
         if (element.match(/^\d+.?\d*$/)) {
           element = Number(element)

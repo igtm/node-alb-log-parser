@@ -387,3 +387,78 @@ tap.test('successful Lambda', function (t) {
   t.equal(parsed.error_reason, '-', 'we have error_reason')
   t.end()
 })
+
+tap.test('waf traffic', function (t) {
+  var parsed = parse(
+    'https 2020-08-10T02:00:13.382659Z my-loadbalancer 192.168.131.39:48944 10.0.0.1:33079 0.010 0.031 0.099 204 204 776 195 "POST https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h?foo=bar&hoge=fuga HTTP/1.1" "axios/0.19.0" ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2 arn:aws:elasticloadbalancing:eu-west-2:019278463782:targetgroup/my-target/id "Root=1-999uuu-82938fnvkdn2j3k48v72" "mytest-111.ap-northeast-1.elb.amazonaws.com" "arn:aws:acm:eu-west-2:019278463782:certificate/my-certificate" 100 2020-08-10T02:00:13.329000Z "waf,forward" "-" "-" "172.20.21.19:33079" "204" "-" "-"'
+  )
+  t.equal(parsed.type, 'https', 'we have https')
+  t.equal(parsed.timestamp, '2020-08-10T02:00:13.382659Z', 'we have timestamp')
+  t.equal(parsed.elb, 'my-loadbalancer', 'we have ELB')
+  t.equal(parsed.client, '192.168.131.39', 'we have client')
+  t.equal(parsed.client_port, 48944, 'we have client_port')
+  t.equal(parsed.target, '10.0.0.1', 'we have target')
+  t.equal(parsed.target_port, 33079, 'we have target_port')
+  t.equal(
+    parsed.request_processing_time,
+    0.010,
+    'we have request_processing_time'
+  )
+  t.equal(
+    parsed.target_processing_time,
+    0.031,
+    'we have target_processing_time'
+  )
+  t.equal(
+    parsed.response_processing_time,
+    0.099,
+    'we have response_processing_time'
+  )
+  t.equal(parsed.elb_status_code, 204, 'we have elb_status_code')
+  t.equal(parsed.target_status_code, 204, 'we have target_status_code')
+  t.equal(parsed.received_bytes, 776, 'we have received_bytes')
+  t.equal(parsed.sent_bytes, 195, 'we have sent_bytes')
+  t.equal(
+    parsed.request,
+    'POST https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h?foo=bar&hoge=fuga HTTP/1.1',
+    'we have request'
+  )
+  t.equal(parsed.request_method, 'POST', 'we have request_method')
+  t.equal(
+    parsed.request_uri,
+    'https://mytest-111.ap-northeast-1.elb.amazonaws.com:443/p/a/t/h?foo=bar&hoge=fuga',
+    'we have request_uri'
+  )
+  t.equal(
+    parsed.request_http_version,
+    'HTTP/1.1',
+    'we have request_http_version'
+  )
+  t.equal(parsed.request_uri_scheme, 'https:', 'we have request_uri_scheme')
+  t.equal(
+    parsed.request_uri_host,
+    'mytest-111.ap-northeast-1.elb.amazonaws.com',
+    'we have request_uri_host'
+  )
+  t.equal(parsed.request_uri_port, 443, 'we have request_uri_port')
+  t.equal(parsed.request_uri_path, '/p/a/t/h', 'we have request_uri_path')
+  t.equal(
+    parsed.request_uri_query,
+    'foo=bar&hoge=fuga',
+    'we have request_uri_query'
+  )
+  t.equal(parsed.user_agent, 'axios/0.19.0', 'we have user_anget')
+  t.equal(parsed.ssl_cipher, 'ECDHE-RSA-AES128-GCM-SHA256', 'we have ssl_cipher')
+  t.equal(parsed.ssl_protocol, 'TLSv1.2', 'we have ssl_protocol')
+  t.equal(parsed.target_group_arn, 'arn:aws:elasticloadbalancing:eu-west-2:019278463782:targetgroup/my-target/id', 'we have target_group_arn')
+  t.equal(parsed.trace_id, 'Root=1-999uuu-82938fnvkdn2j3k48v72', 'we have trace_id')
+  t.equal(parsed.domain_name, 'mytest-111.ap-northeast-1.elb.amazonaws.com', 'we have domain_name')
+  t.equal(parsed.chosen_cert_arn, 'arn:aws:acm:eu-west-2:019278463782:certificate/my-certificate', 'we have chosen_cert_arn')
+  t.equal(parsed.matched_rule_priority, 100, 'we have matched_rule_priority')
+  t.equal(parsed.request_creation_time, '2020-08-10T02:00:13.329000Z', 'we have request_creation_time')
+  t.equal(parsed.actions_executed, 'waf,forward', 'we have actions_executed')
+  t.equal(parsed.redirect_url, '-', 'we have redirect_url')
+  t.equal(parsed.error_reason, '-', 'we have error_reason')
+  t.equal(parsed.target_status_code_list, 204, 'we have target_status_code_list')
+  t.end()
+})
