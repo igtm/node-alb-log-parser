@@ -48,7 +48,7 @@ tap.test('http traffic', function (t) {
     'HTTP/1.1',
     'we have request_http_version'
   )
-  t.equal(parsed.request_uri_scheme, 'http:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'http', 'we have request_uri_scheme')
   t.equal(
     parsed.request_uri_host,
     'www.example.com',
@@ -102,7 +102,7 @@ tap.test('https traffic', function (t) {
   t.equal(parsed.request_method, 'GET', 'we have request_method')
   t.equal(parsed.request_uri, 'https://www.example.com:443/', 'we have request_uri')
   t.equal(parsed.request_http_version, 'HTTP/1.1', 'we have request_http_version')
-  t.equal(parsed.request_uri_scheme, 'https:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'https', 'we have request_uri_scheme')
   t.equal(parsed.request_uri_host, 'www.example.com', 'we have request_uri_host')
   t.equal(parsed.request_uri_port, 443, 'we have request_uri_port')
   t.equal(parsed.request_uri_path, '/', 'we have request_uri_path')
@@ -155,7 +155,7 @@ tap.test('https traffic', function (t) {
     'HTTP/1.1',
     'we have request_http_version'
   )
-  t.equal(parsed.request_uri_scheme, 'https:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'https', 'we have request_uri_scheme')
   t.equal(
     parsed.request_uri_host,
     'mytest-111.ap-northeast-1.elb.amazonaws.com',
@@ -260,7 +260,7 @@ tap.test('websockets', function (t) {
     'HTTP/1.1',
     'we have request_http_version'
   )
-  t.equal(parsed.request_uri_scheme, 'http:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'http', 'we have request_uri_scheme')
   t.equal(parsed.request_uri_host, '10.0.0.30', 'we have request_uri_host')
   t.equal(parsed.request_uri_port, 80, 'we have request_uri_port')
   t.equal(parsed.request_uri_path, '/', 'we have request_uri_path')
@@ -295,7 +295,7 @@ tap.test('secure websockets', function (t) {
   t.equal(parsed.request_method, 'GET', 'we have request_method')
   t.equal(parsed.request_uri, 'https://10.0.0.30:443/', 'we have request_uri')
   t.equal(parsed.request_http_version, 'HTTP/1.1', 'we have request_http_version')
-  t.equal(parsed.request_uri_scheme, 'https:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'https', 'we have request_uri_scheme')
   t.equal(parsed.request_uri_host, '10.0.0.30', 'we have request_uri_host')
   t.equal(parsed.request_uri_port, 443, 'we have request_uri_port')
   t.equal(parsed.request_uri_path, '/', 'we have request_uri_path')
@@ -325,7 +325,7 @@ tap.test('unsuccessful Lambda', function (t) {
   t.equal(parsed.request_method, 'GET', 'we have request_method')
   t.equal(parsed.request_uri, 'http://www.example.com:80/', 'we have request_uri')
   t.equal(parsed.request_http_version, 'HTTP/1.1', 'we have request_http_version')
-  t.equal(parsed.request_uri_scheme, 'http:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'http', 'we have request_uri_scheme')
   t.equal(parsed.request_uri_host, 'www.example.com', 'we have request_uri_host')
   t.equal(parsed.request_uri_port, 80, 'we have request_uri_port')
   t.equal(parsed.request_uri_path, '/', 'we have request_uri_path')
@@ -367,7 +367,7 @@ tap.test('successful Lambda', function (t) {
   t.equal(parsed.request_method, 'GET', 'we have request_method')
   t.equal(parsed.request_uri, 'http://www.example.com:80/', 'we have request_uri')
   t.equal(parsed.request_http_version, 'HTTP/1.1', 'we have request_http_version')
-  t.equal(parsed.request_uri_scheme, 'http:', 'we have request_uri_scheme')
+  t.equal(parsed.request_uri_scheme, 'http', 'we have request_uri_scheme')
   t.equal(parsed.request_uri_host, 'www.example.com', 'we have request_uri_host')
   t.equal(parsed.request_uri_port, 80, 'we have request_uri_port')
   t.equal(parsed.request_uri_path, '/', 'we have request_uri_path')

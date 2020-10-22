@@ -10,7 +10,7 @@ const fields = [
   'request',                'user_agent',               'ssl_cipher',               'ssl_protocol',
   'target_group_arn',       'trace_id',                 'domain_name',              'chosen_cert_arn',
   'matched_rule_priority',  'request_creation_time',    'actions_executed',         'redirect_url',
-  'error_reason',           'target:port_list',         'target_status_code_list',  'classification',
+  'error_reason',           'target_port_list',         'target_status_code_list',  'classification',
   'classification_reason'
 ]
 module.exports = function (line) {
@@ -125,7 +125,7 @@ function _decorateFromRequest(element, parsed) {
   parsed.request_uri = request_uri
   parsed.request_http_version = request_http_version
   const parsedUrl = url.parse(request_uri)
-  parsed.request_uri_scheme = parsedUrl.protocol
+  parsed.request_uri_scheme = parsedUrl.protocol.replace(':', '')
   parsed.request_uri_host = parsedUrl.hostname
   if (parsedUrl.port) {
     parsed.request_uri_port = parseInt(parsedUrl.port)
